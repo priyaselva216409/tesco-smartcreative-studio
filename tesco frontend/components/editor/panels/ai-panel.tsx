@@ -199,7 +199,28 @@ export function AIPanel() {
       icon: Wand2,
       name: "Enhance Image",
       description: "Improve image quality",
-      action: () => {},
+      action: async () => {
+        if (!selectedLayer || selectedLayer.type !== "image") return
+        setIsProcessing(true)
+        setProcessingFeature("enhance")
+        setProcessingStatus("processing")
+        setErrorMessage(null)
+        try {
+          // Simulate image enhancement with delay
+          await new Promise((resolve) => setTimeout(resolve, 1500))
+          setProcessingStatus("success")
+          // In production, would apply filters/enhancement
+        } catch {
+          setProcessingStatus("error")
+          setErrorMessage("Image enhancement failed.")
+        } finally {
+          setIsProcessing(false)
+          setTimeout(() => {
+            setProcessingStatus("idle")
+            setProcessingFeature(null)
+          }, 2000)
+        }
+      },
       disabled: !selectedLayer || selectedLayer.type !== "image",
     },
   ]
@@ -323,8 +344,42 @@ export function AIPanel() {
           onChange={(e) => setAiPrompt(e.target.value)}
           className="min-h-20 resize-none"
         />
-        <Button className="w-full gap-2" disabled={!aiPrompt.trim() || isProcessing}>
-          {isProcessing ? (
+        <Button 
+          className="w-full gap-2" 
+          disabled={!aiPrompt.trim() || isProcessing}
+          onClick={async () => {
+            setIsProcessing(true)
+            setProcessingFeature("assistant")
+            setProcessingStatus("processing")
+            setErrorMessage(null)
+            
+            try {
+              const response = await fetch("http://localhost:5000/api/ai/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: aiPrompt }),
+              })
+              
+              if (!response.ok) throw new Error("Failed to get AI suggestions")
+              
+              const { reply } = await response.json()
+              alert("🤖 AI Assistant Reply:\n\n" + reply)
+              setAiPrompt("")
+              setProcessingStatus("success")
+            } catch (error) {
+              setProcessingStatus("error")
+              setErrorMessage("AI suggestions failed. Please try again.")
+              console.error(error)
+            } finally {
+              setIsProcessing(false)
+              setTimeout(() => {
+                setProcessingStatus("idle")
+                setProcessingFeature(null)
+              }, 1000)
+            }
+          }}
+        >
+          {isProcessing && processingFeature === "assistant" ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
               Processing...

@@ -26,14 +26,14 @@ This is a fully functional backend for a Canva-like design editor application. I
 Create a `.env` file in the root directory based on `.env.example` and provide values for:
 
 - `PORT` - Port on which the server will run (default: 5000)
-- `MONGODB_URI` - MongoDB connection string (e.g., mongodb+srv://username:password@cluster.mongodb.net/dbname)
+- `MONGODB_URI` - MongoDB connection string 
 - `JWT_SECRET` - Secret key for JWT token signing and verification
 
-Example `.env` file:
-
-    PORT=5000
-    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
-    JWT_SECRET=your_jwt_secret_key
+### Example `.env` file:
+PORT=5000
+MONGODB_URI=YOUR_MONGODB_ATLAS_CONNECTION_STRING
+JWT_SECRET=YOUR_JWT_SECRET
+   
 
 ## Installation Steps
 
@@ -145,4 +145,16 @@ All endpoints are prefixed with `/api`.
 - The backend creates necessary collections automatically.
 
 ## Project Structure Explanation
+canva-like-backend/
+├── controllers/        # Auth, project, upload, export logic
+├── models/             # Mongoose schemas
+├── routes/             # Express routes
+├── middleware/         # JWT authentication middleware
+├── uploads/            # Uploaded image files
+├── utils/              # Helper utilities
+├── server.js           # Application entry point
+├── package.json        # Project metadata and dependencies
+├── .env.example        # Environment variable template (no secrets)
+├── .gitignore          # Ignored files and folders
+└── README.md           # Project documentation
 

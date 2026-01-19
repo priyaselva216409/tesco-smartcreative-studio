@@ -174,6 +174,9 @@ export function CanvasArea() {
             transformOrigin: "center center",
           }}
           onClick={handleCanvasClick}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
           {layers.length === 0 && !isDraggingOver && !previewMode && <EmptyCanvasState />}
 

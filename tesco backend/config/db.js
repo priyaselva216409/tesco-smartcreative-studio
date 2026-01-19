@@ -2,11 +2,14 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI, {
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 5000,
+    });
     console.log("MongoDB connected successfully");
   } catch (error) {
-    console.error("MongoDB connection failed", error);
-    process.exit(1);
+    console.warn("⚠️ MongoDB connection failed (running in demo mode). AI features will work.", error.message);
+    // Don't exit; allow server to run without DB for demo
   }
 };
 

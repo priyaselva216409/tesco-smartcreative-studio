@@ -1,3 +1,4 @@
+import './setupEnv.js';
 import request from "supertest";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
